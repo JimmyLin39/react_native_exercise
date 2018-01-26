@@ -63,7 +63,15 @@ export default class App extends Component<{}> {
           renderItem={({item}) => 
             <View>
               {/* load url with HTTPS */}
-              <ImageBackground source={{uri: item.url.slice(0, 4) + 's' + item.url.slice(4)}} style={styles.image} borderRadius={20} borderWidth={2} shadowColor={'#00ffff'}>
+              <ImageBackground 
+                source={{
+                  uri: item.url.slice(0, 4) + 's' + item.url.slice(4), 
+                  cache: 'force-cache',
+                }} 
+                style={styles.image} 
+                borderRadius={20} 
+                borderWidth={2}
+              >
                 <Text style={styles.text}>{item.title}</Text>
               </ImageBackground>
             </View>
