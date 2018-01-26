@@ -16,48 +16,36 @@ import {
 } from 'react-native';
 
 export default class App extends Component<{}> {
+  constructor(props) {
+    super(props);
+    this.state = {
+      photosData: [],
+    }
+  }
+
+  componentDidMount() {
+    return fetch('https://jsonplaceholder.typicode.com/albums/1/photos')
+      .then((response) => response.json())
+      .then((responseJson) => {
+        this.setState({
+          photosData: responseJson,
+        }, function() {
+          // do something with new state
+          console.log(this.state.photosData);
+          
+        });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
   _keyExtractor = (item, index) => item.id;
   render() {
     return (
       <View style={styles.container}>
         <FlatList
-          data={[
-            {
-              "albumId": 1,
-              "id": 1,
-              "title": "accusamus beatae ad facilis cum similique qui sunt",
-              "url": "http://placehold.it/600/92c952",
-              "thumbnailUrl": "http://placehold.it/150/92c952"
-            },
-            {
-              "albumId": 1,
-              "id": 2,
-              "title": "reprehenderit est deserunt velit ipsam",
-              "url": "http://placehold.it/600/771796",
-              "thumbnailUrl": "http://placehold.it/150/771796"
-            },
-            {
-              "albumId": 1,
-              "id": 3,
-              "title": "officia porro iure quia iusto qui ipsa ut modi",
-              "url": "http://placehold.it/600/24f355",
-              "thumbnailUrl": "http://placehold.it/150/24f355"
-            },
-            {
-              "albumId": 1,
-              "id": 4,
-              "title": "culpa odio esse rerum omnis laboriosam voluptate repudiandae",
-              "url": "http://placehold.it/600/d32776",
-              "thumbnailUrl": "http://placehold.it/150/d32776"
-            },
-            {
-              "albumId": 1,
-              "id": 5,
-              "title": "natus nisi omnis corporis facere molestiae rerum in",
-              "url": "http://placehold.it/600/f66b97",
-              "thumbnailUrl": "http://placehold.it/150/f66b97"
-            }
-          ]}
+          data={this.state.photosData}
           keyExtractor={this._keyExtractor}
           numColumns= {2}
           renderItem={({item}) => 
