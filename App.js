@@ -6,6 +6,7 @@
 
 import React, { Component } from 'react';
 import {
+  Dimensions,
   FlatList,
   Image,
   Platform,
@@ -13,13 +14,6 @@ import {
   Text,
   View
 } from 'react-native';
-
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' +
-    'Cmd+D or shake for dev menu',
-  android: 'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
 
 export default class App extends Component<{}> {
   _keyExtractor = (item, index) => item.id;
@@ -65,11 +59,12 @@ export default class App extends Component<{}> {
             }
           ]}
           keyExtractor={this._keyExtractor}
+          numColumns= {2}
           renderItem={({item}) => 
             <View>
-              <Text style={styles.text}>{item.title}</Text>
+              {/* <Text style={styles.text}>{item.title}</Text> */}
               {/* load url with HTTPS */}
-              <Image source={{uri: item.url.slice(0, 4) + 's' + item.url.slice(4)}} style={{width: 400, height: 400}} />
+              <Image source={{uri: item.url.slice(0, 4) + 's' + item.url.slice(4)}} style={styles.image} />
             </View>
           }
         />
@@ -81,10 +76,14 @@ export default class App extends Component<{}> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
     backgroundColor: '#F5FCFF',
     marginTop: 20
+  },
+  image: {
+    margin: 2,
+    padding: 2,
+    height: (Dimensions.get('window').height/3) - 12,
+    width: (Dimensions.get('window').width/2) - 4,
   },
   text: {
     fontSize: 15,
