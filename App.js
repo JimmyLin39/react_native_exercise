@@ -8,7 +8,7 @@ import React, { Component } from 'react';
 import {
   Dimensions,
   FlatList,
-  Image,
+  ImageBackground,
   Platform,
   StyleSheet,
   Text,
@@ -62,9 +62,10 @@ export default class App extends Component<{}> {
           numColumns= {2}
           renderItem={({item}) => 
             <View>
-              {/* <Text style={styles.text}>{item.title}</Text> */}
               {/* load url with HTTPS */}
-              <Image source={{uri: item.url.slice(0, 4) + 's' + item.url.slice(4)}} style={styles.image} />
+              <ImageBackground source={{uri: item.url.slice(0, 4) + 's' + item.url.slice(4)}} style={styles.image} borderRadius={20} borderWidth={2} shadowColor={'#00ffff'}>
+                <Text style={styles.text}>{item.title}</Text>
+              </ImageBackground>
             </View>
           }
         />
@@ -80,19 +81,20 @@ const styles = StyleSheet.create({
     marginTop: 20
   },
   image: {
+    borderRadius: 20,
     margin: 2,
     padding: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.8,
+    shadowRadius: 2,
     height: (Dimensions.get('window').height/3) - 12,
     width: (Dimensions.get('window').width/2) - 4,
   },
   text: {
     fontSize: 15,
+    marginTop: 80,
     textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
+    transform: [{ rotate: '45deg'}],
   },
 });
