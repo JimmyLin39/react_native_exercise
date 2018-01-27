@@ -6,6 +6,7 @@
 
 import React, { Component } from 'react';
 import {
+  Button,
   Dimensions,
   FlatList,
   ImageBackground,
@@ -39,7 +40,10 @@ export default class App extends Component<{}> {
         console.error(error);
       });
   }
-
+  
+  reorderPhotos() {
+    return true;
+  }
   _keyExtractor = (item, index) => item.id;
   render() {
     return (
@@ -64,6 +68,12 @@ export default class App extends Component<{}> {
               </ImageBackground>
             </View>
           }
+        />
+        <Button
+          onPress={this.reorderPhotos}
+          title="Reorder Photos"
+          color="#841584"
+          accessibilityLabel="Reorder Photos"
         />
       </View>
     );
