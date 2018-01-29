@@ -1,16 +1,9 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
-
 import React, { Component } from 'react';
 import {
   Button,
   Dimensions,
   FlatList,
   ImageBackground,
-  Platform,
   StyleSheet,
   Text,
   View
@@ -21,43 +14,68 @@ export default class App extends Component<{}> {
     super(props);
     this.state = {
       photosData: [],
+      reorder: false,
     }
+    this.shuffle = this.shuffle.bind(this);
+    this.shuffleRecursion = this.shuffleRecursion.bind(this);
   }
 
   componentDidMount() {
     return fetch('https://jsonplaceholder.typicode.com/albums/1/photos')
       .then((response) => response.json())
       .then((responseJson) => {
-        this.setState({
-          photosData: responseJson,
-        }, function() {
-          // do something with new state
-          console.log(this.state.photosData);
-          
-        });
+        this.setState({ photosData: responseJson });
       })
       .catch((error) => {
         console.error(error);
       });
   }
   
-  reorderPhotos() {
-    return true;
+  shuffle() {
+    let array = this.state.photosData;
+    let currentIndex = array.length, temporaryValue, randomIndex;
+    return this.shuffleRecursion(array, currentIndex);
   }
-  _keyExtractor = (item, index) => item.id;
+  
+  shuffleRecursion(array, currentIndex) {
+    // If there no remain elements to shuffle...
+    if(currentIndex === 0){
+      return this.setState({ 
+        photosData: array, 
+        reorder: true 
+      }, function() {
+        // reset the reorder state
+        this.setState({reorder: false})
+      });
+    }
+    // Pick a remaining element...
+    let randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+
+    // And swap it with the current element.
+    let temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+
+    return this.shuffleRecursion(array, currentIndex);
+  }
+
+  _keyExtractor = (item, index) => item.url;
   render() {
     return (
       <View style={styles.container}>
         <FlatList
           data={this.state.photosData}
+          key={this.state.reorder}
           keyExtractor={this._keyExtractor}
           numColumns= {2}
           renderItem={({item}) => 
-            <View>
+          <View>
               {/* load url with HTTPS */}
               <ImageBackground 
                 source={{
                   uri: item.url.slice(0, 4) + 's' + item.url.slice(4), 
+                  // cache downloaded photos (ios only)
                   cache: 'force-cache',
                 }} 
                 style={styles.image} 
@@ -70,7 +88,7 @@ export default class App extends Component<{}> {
           }
         />
         <Button
-          onPress={this.reorderPhotos}
+          onPress={this.shuffle}
           title="Reorder Photos"
           color="#841584"
           accessibilityLabel="Reorder Photos"
